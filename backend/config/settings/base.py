@@ -41,10 +41,14 @@ DJANGO_APPS = [
 
 SITE_ID = 1
 
-THIRD_PARTY_APPS: list[str] = []
+THIRD_PARTY_APPS: list[str] = [
+    "rest_framework",
+    "rest_framework_simplejwt",
+]
 
 LOCAL_APPS = [
     "apps.users",
+    "apps.properties",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -182,3 +186,25 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # ---------------------------------------------------------------------------
 DEFAULT_FROM_EMAIL     = env("DEFAULT_FROM_EMAIL", default="noreply@agrogestao.com.br")
 PASSWORD_RESET_TIMEOUT = 3600  # Link de reset expira em 1 hora
+
+# ---------------------------------------------------------------------------
+# Django REST Framework + SimpleJWT
+# ---------------------------------------------------------------------------
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
+    ),
+}
+
+from datetime import timedelta  # noqa: E402
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
